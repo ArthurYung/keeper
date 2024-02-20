@@ -68,7 +68,8 @@ test('test all types correctly', ({ expect }) => {
     key6: null,
     key7: undefined,
     key8: {},
-    key9: null
+    key9: null,
+    clearKey: 'clearKey' // be cleared
   }
   const fromObjectAction = fromObject(properties, {})
 

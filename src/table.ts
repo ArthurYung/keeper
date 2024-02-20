@@ -36,7 +36,7 @@ export enum SymbolTypeTable {
   ARRAY = SYMBOL_ARRAY,
 }
 
-export interface TypeTransfroMap {
+export interface TypeTransformMap {
   [SYMBOL_INT]: number
   [SYMBOL_FLOAT]: number
   [SYMBOL_STRING]: string

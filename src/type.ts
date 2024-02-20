@@ -1,5 +1,5 @@
 import { type ProperiteItemMap } from './parser'
-import { type TypeTransfroMap } from './table'
+import { type TypeTransformMap } from './table'
 
 type TrimLeft<Str extends string> = Str extends ` ${infer Rest}`
   ? TrimLeft<Rest>
@@ -24,8 +24,8 @@ type GetType<
   Includes extends Object = {},
 > = Str extends `${infer Type}[]`
   ? Array<GetType<Type, Includes>>
-  : Str extends keyof TypeTransfroMap
-    ? TypeTransfroMap[Str]
+  : Str extends keyof TypeTransformMap
+    ? TypeTransformMap[Str]
     : Str extends `*${infer IncloudName}`
       ? IncloudName extends keyof Includes
         ? Includes[IncloudName]

@@ -62,7 +62,7 @@ type ParseLine<Str extends string, Includes extends Object = {}> =
       : {}
 
 /**
- * Convert a DSL (Domain-Specific Language) for declaring types of
+ * Convert a DSL for declaring types of
  * multi-line object properties to TypeScript types.
  *
  * Support passing type inheritance as the second parameter.

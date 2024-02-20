@@ -6,6 +6,10 @@ export interface ProperiteReader {
 
 export const readerMap = new Map<string, ProperiteReader>()
 
+/*
+ * Register reader methods for data type.
+ **/
+
 readerMap.set(SymbolTypeTable.BOOL, { reader: (source) => !!source })
 readerMap.set(SymbolTypeTable.INT, { reader: (source) => ~~source })
 readerMap.set(SymbolTypeTable.NULL, { reader: () => null })

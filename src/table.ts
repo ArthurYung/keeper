@@ -49,6 +49,11 @@ export interface TypeTransfroMap {
 }
 
 export enum SymbolExtensionTable {
-  RENAME = 'rename',
-  COPY = 'copy',
+  RENAME = 'renamefrom',
+  COPY = 'copyas',
+}
+
+export enum SymbolTokenTable {
+  SPACE = ' ',
+  BREAK = '\n',
 }

@@ -1,4 +1,8 @@
-import { SymbolExtensionTable, SymbolTypeTable } from './table'
+import {
+  SymbolExtensionTable,
+  SymbolTokenTable,
+  SymbolTypeTable
+} from './table'
 
 export interface ProperiteItem {
   type: string
@@ -10,24 +14,80 @@ export interface ProperiteItem {
 
 export type ProperiteItemMap = Map<string, ProperiteItem>
 
-function tokenizer (chars: string = ''): string[][] {
-  return chars.split(/\r?\n/).map((lineChars) => lineChars.split(/\s+/))
+/*
+ * Parse the string into an array of tokens based on spaces and line breaks.
+ *
+ * @example
+ * tokenizer(`
+ * key1 bool
+ * key2 int
+ * `)
+ * // => [['key1', 'bool'], ['key2', 'int']]
+ **/
+function tokenizer (input: string = ''): string[][] {
+  const result: string[][] = []
+  let buffers: string[] = []
+  let buffer = ''
+
+  for (const char of input) {
+    if (char === SymbolTokenTable.SPACE || char === SymbolTokenTable.BREAK) {
+      if (buffer) {
+        buffers.push(buffer)
+        buffer = ''
+      }
+
+      if (char === SymbolTokenTable.BREAK && buffers.length) {
+        result.push(buffers)
+        buffers = []
+      }
+    } else {
+      buffer += char
+    }
+  }
+
+  // Handle remaining characters in buffer and buffers
+  if (buffer) {
+    buffers.push(buffer)
+  }
+  if (buffers.length) {
+    result.push(buffers)
+  }
+
+  return result
 }
 
+/**
+ * Compile tokens into a map of properties.
+ *
+ * Supported extensions:
+ * - `renamefrom:name` - Rename the property to the specified name.
+ * - `copyas:name` - Copy the property to the specified name.
+ *
+ * @example
+ * compile([['key1', 'bool'], ['key2', 'int', 'renamefrom:source1'], ['key3', 'int', 'copyas:key4')
+ * // => Map {
+ * //   'key1' => { key: 'key1', type: 'bool', name: 'key1' },
+ * //   'key2' => { key: 'key2', type: 'int', name: 'source1' },
+ * //  'key3' => { key: 'key3', type: 'int', name: 'key3' },
+ * //   'key4' => { key: 'key3', type: 'int', name: 'key4' }
+ * // }
+ **/
 function compile (tokens: string[][]) {
   const properites = new Map<string, ProperiteItem>()
   for (const token of tokens) {
     const properite = parseToken(token)
     const extensions = parseExtension(token[2])
 
-    if (extensions.rename) {
-      properite.name = extensions.rename
+    // rename the property from the specified name.
+    if (extensions.renamefrom) {
+      properite.name = extensions.renamefrom
     }
 
-    if (extensions.copy) {
-      properites.set(extensions.copy, {
+    if (extensions.copyas) {
+      // create a new property item and inherit the currently parsed property.
+      properites.set(extensions.copyas, {
         ...properite,
-        name: extensions.copy
+        name: extensions.copyas
       })
     }
 
@@ -40,14 +100,14 @@ function compile (tokens: string[][]) {
 function parseType (value: string) {
   let isArray = false
   let isExtend = false
-  let type = value
-  if (type.substring(type.length - 2, type.length) === SymbolTypeTable.ARRAY) {
-    isExtend = true
+  let type = value || ''
+  if (type.endsWith(SymbolTypeTable.ARRAY)) {
+    isArray = true
     type = type.substring(0, type.length - 2)
   }
 
-  if (type.charAt(0) === SymbolTypeTable.EXTEND) {
-    isArray = true
+  if (type.startsWith(SymbolTypeTable.EXTEND)) {
+    isExtend = true
     type = type.substring(1)
   }
 
@@ -86,6 +146,33 @@ function parseToken (token: string[]) {
   }
 }
 
+/**
+ * Parse the input string into a map of properties.
+ *
+ * supported complex type declarations:
+ * - `type[]` - Array of type.
+ * - `*type` - Extend from another type.
+ *
+ * supported extensions:
+ * - `renamefrom:name` - Rename the property from the specified name.
+ *   - `copyas:name` - Copy the property to the specified name.
+ *
+ * @example
+ * parse(`
+ * key1 bool
+ * key2 int renamefrom:source1
+ * key3 int copyas:key4
+ * key5 string[]
+ * key6 *other
+ * `)
+ * // => Map {
+ * //   'key1' => { key: 'key1', type: 'bool', name: 'key1' },
+ * //   'key2' => { key: 'source1', type: 'int', name: 'key2'},
+ * //   'key3' => { key: 'key3', type: 'int', name: 'key3' },
+ * //   'key4' => { key: 'key3', type: 'int', name: 'key4' },
+ * //   'key5' => { key: 'key5', type: 'string', name: 'key5', isArray: true },
+ * //   'key6' => { key: 'key6', type: 'other', name: 'key6', isExtend: true }
+ **/
 export function parse (chars: string = '') {
   const tokens = tokenizer(chars)
   const properites = compile(tokens)

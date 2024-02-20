@@ -58,19 +58,17 @@ function parseType (value: string) {
   }
 }
 
-function parseExtension (value = '') {
+function parseExtension (extension = '') {
   const extensions: { [x in SymbolExtensionTable]?: string } = {}
-  value.split(';').forEach((item) => {
-    const [key, value] = item.split(':')
-    if (key === SymbolExtensionTable.RENAME) {
-      extensions[SymbolExtensionTable.RENAME] = value
-      return
-    }
+  const [key, value] = extension.split(':')
 
-    if (key === SymbolExtensionTable.COPY) {
-      extensions[SymbolExtensionTable.COPY] = value
-    }
-  })
+  if (key === SymbolExtensionTable.RENAME) {
+    extensions[SymbolExtensionTable.RENAME] = value
+  }
+
+  if (key === SymbolExtensionTable.COPY) {
+    extensions[SymbolExtensionTable.COPY] = value
+  }
 
   return extensions
 }

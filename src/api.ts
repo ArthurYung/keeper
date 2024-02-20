@@ -1,5 +1,6 @@
 import { type ProperiteItem, type ProperiteItemMap } from './parser'
 import { readerMap } from './reader'
+import { type KeeperConfig } from './type'
 
 export function getSourceValue (source: any, propertie: ProperiteItem) {
   const sourceValue = source[propertie.key]
@@ -14,20 +15,24 @@ export function getSourceValue (source: any, propertie: ProperiteItem) {
   return sourceValue
 }
 
-function getPropertieReader (propertie: ProperiteItem, config: any = {}) {
+function getPropertieReader (
+  propertie: ProperiteItem,
+  config: KeeperConfig = {}
+) {
   if (!propertie.isExtend) {
     return readerMap.get(propertie.type)?.reader
   }
 
-  const extendConfig = config.extends[propertie.type] || {}
+  const extendConfig = config.extends?.[propertie.type]
+  if (!extendConfig?.properties) {
+    return null
+  }
 
-  return extendConfig.properties
-    ? fromObject(extendConfig.properties, extendConfig.config)
-    : null
+  return fromObject(extendConfig.properties, extendConfig.config)
 }
 
-export function fromObject (properties: ProperiteItemMap, config: any) {
-  return (source: Object) => {
+export function fromObject (properties: ProperiteItemMap, config: KeeperConfig) {
+  return (source: any) => {
     const result: any = {}
     properties.forEach((propertie) => {
       const reader = getPropertieReader(propertie, config)

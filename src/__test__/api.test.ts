@@ -1,5 +1,5 @@
 import { test } from 'vitest'
-import { fromObject } from '../api'
+import { fromObject, readProperiteValue } from '../api'
 import { type KeeperConfig } from '../type'
 
 test('should create a new object based on the properties', ({ expect }) => {
@@ -220,6 +220,81 @@ test('test extends properties', ({ expect }) => {
         "key1": true,
         "key2": 0,
       },
+    }
+  `)
+})
+
+test('readProperiteValue', ({ expect }) => {
+  const extendProperties = new Map([
+    ['key1', { type: 'bool', key: 'key1', name: 'key1' }],
+    ['key2', { type: 'int', key: 'key2', name: 'key2' }]
+  ])
+
+  const properties = new Map([
+    [
+      'key3',
+      { type: 'other_source_type', key: 'key3', name: 'key3', isExtend: true }
+    ],
+    [
+      'key4',
+      {
+        type: 'string',
+        key: 'key4',
+        name: 'key4',
+        isArray: true
+      }
+    ],
+    [
+      'key5',
+      {
+        type: 'other_source_type',
+        key: 'key5',
+        name: 'key5',
+        isArray: true,
+        isExtend: true
+      }
+    ]
+  ])
+
+  const readProperiteValueAction = readProperiteValue(properties, {
+    extends: {
+      other_source_type: { properties: extendProperties }
+    }
+  } as unknown as KeeperConfig)
+
+  const source = {
+    key3: {
+      key1: 'true',
+      key2: null,
+      key3: 'null'
+    },
+    key4: [1, 2],
+    key5: [
+      { key1: 'true', key2: null },
+      { key1: 'false', key2: 1 }
+    ]
+  }
+
+  const boolValue = readProperiteValueAction(source, 'key3.key1')
+  const intValue = readProperiteValueAction(source, 'key3.key2')
+
+  const arrayVal1 = readProperiteValueAction(source, 'key4[0]')
+  const arrayVal2 = readProperiteValueAction(source, 'key4[2]')
+
+  const arrExtendVal1 = readProperiteValueAction(source, 'key5[0].key1')
+  // read empty value
+  const arrExtendVal2 = readProperiteValueAction(source, 'key5[3]')
+
+  expect(boolValue).toBe(true)
+  expect(intValue).toBe(0)
+  expect(arrayVal1).toBe('1')
+  expect(arrayVal2).toBe('')
+
+  expect(arrExtendVal1).toBe(true)
+  expect(arrExtendVal2).toMatchInlineSnapshot(`
+    {
+      "key1": false,
+      "key2": 0,
     }
   `)
 })

@@ -67,7 +67,7 @@ type ParseLine<Str extends string, Includes extends Object = {}> =
  *
  * Support passing type inheritance as the second parameter.
  **/
-type ParseRuleString<
+export type ParseRuleString<
   Str extends string,
   Includes extends Object = {},
   Origins extends Object = {},
@@ -78,8 +78,8 @@ type ParseRuleString<
 /**
  * Convert a struct with inheritance to a TypeScript interface type.
  **/
-type TransferKeeperExtendType<Config extends KeeperConfig> =
-  Config['extends'] extends Record<string, KeeperInstance>
+export type TransferKeeperExtendType<Config extends KeeperConfig> =
+  Config['extends'] extends Record<string, Omit<KeeperInstance, 'read'>>
     ? {
         [x in keyof Config['extends']]: ReturnType<
         Config['extends'][x]['from']
@@ -87,18 +87,51 @@ type TransferKeeperExtendType<Config extends KeeperConfig> =
       }
     : {}
 
+type GetPathType<
+  Path extends string,
+  Source extends any,
+> = Path extends keyof Source
+  ? Source[Path]
+  : Path extends `${infer C}.${infer Next}`
+    ? C extends keyof Source
+      ? GetPathType<Next, Source[C]>
+      : GetPathType<Next, GetPathType<C, Source>>
+    : Path extends `${infer D}[${number}]`
+      ? D extends keyof Source
+        ? Source[D] extends any[]
+          ? Source[D][0]
+          : never
+        : never
+      : never
+
+type Primitive = string | number | boolean | null | undefined
+
+type Expand<T> = T extends Primitive
+  ? string
+  : {
+      [K in keyof T]: K extends string
+        ? T[K] extends Array<infer U>
+          ? `${K}` | `${K}[${number}]` | `${K}[${number}].${Expand<U>}`
+          : `${K}` | `${K}.${Expand<T[K]>}`
+        : never;
+    }[keyof T]
+
 /**
  * Keeper configuration options, including inheritable objects.
  **/
 export interface KeeperConfig {
-  extends?: Record<string, KeeperInstance>
+  extends?: Record<string, Omit<KeeperInstance, 'read'>>
 }
 
 export interface KeeperInstance<
-  T extends string = '',
+  InstanceType extends any = {},
   Config extends KeeperConfig = {},
 > {
   properties: ProperiteItemMap
   config: Config
-  from: (source: any) => ParseRuleString<T, TransferKeeperExtendType<Config>>
+  from: (source: any) => InstanceType
+  read: <P extends Expand<InstanceType>>(
+    obj: any,
+    path: P,
+  ) => GetPathType<P, InstanceType>
 }

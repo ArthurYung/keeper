@@ -38,11 +38,13 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      - run: npm run build
       - name: Commit build artifacts
         run: |
           git config --local user.email "bruceau00@gmail.com"
           git config --local user.name "GitHub Action"
       - run: npm run version
+      - run: npm publish
       - run: git push
         env:
-          NODE_AUTH_TOKEN: ${{secrets.ACCOUNT_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

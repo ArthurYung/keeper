@@ -13,6 +13,7 @@
     "test": "vitest",
     "build": "tsc && vite build",
     "coverage": "vitest run --coverage",
+    "version": "standard-version",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
+    "standard-version": "^9.5.0",
     "typescript": "^5.3.3",
     "vite": "^5.1.0",
     "vite-plugin-dts": "^3.7.3",

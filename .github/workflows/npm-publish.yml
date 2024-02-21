@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.author.email, 'burce-ci@gmail.com')"
+    if: "!contains(github.event.head_commit.author.email, 'burce-ci@github.com')"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -22,14 +22,27 @@ jobs:
       - name: Display event name
         run: echo "github.event.head_commit.author.email=${{ github.event.head_commit.author.email }}"
 
-      - run: npm ci
-      - run: npm coverage
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         env:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: ArthurYung/keeper
 
-      # - run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run version
+      - name: Commit build artifacts
+        run: |
+          git config --local user.email "bruce-ci@github.com"
+          git config --local user.name "GitHub Action"
+          git push
+      # env:
+      #   NODE_AUTH_TOKEN: ${{secrets.ACCOUNT_TOKEN}}

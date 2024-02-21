@@ -4,8 +4,8 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: ["main"]
 
 jobs:
   build:
@@ -27,6 +27,10 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+
+      - name: Display event name
+        run: echo "github.event_name=${{ github.event_name }}"
+
       - run: npm ci
       - run: npm coverage
       - name: Upload coverage reports to Codecov

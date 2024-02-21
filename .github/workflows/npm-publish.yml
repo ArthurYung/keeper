@@ -10,26 +10,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.author.email, 'burce-ci@gmail.com')"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
+      - run: npm run coverage
 
       - name: Display event name
-        run: echo "github.event_name=${{ github.event_name }}"
+        run: echo "github.event.head_commit.author.email=${{ github.event.head_commit.author.email }}"
 
       - run: npm ci
       - run: npm coverage
@@ -38,6 +29,7 @@ jobs:
         env:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: ArthurYung/keeper
+
       # - run: npm publish
       #   env:
       #     NODE_AUTH_TOKEN: ${{secrets.npm_token}}

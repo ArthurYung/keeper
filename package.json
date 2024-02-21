@@ -4,7 +4,14 @@
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArthurYung/keeper.git"
+  },
+  "homepage": "https://github.com/ArthurYung/Keeper#readme",
   "types": "dist/index.d.ts",
+  "author": "Bruce.Au",
+  "license": "MIT",
   "files": [
     "dist"
   ],

@@ -7,10 +7,11 @@ import {
   type ParseRuleString
 } from './type'
 
-export function createKeeper<T extends string, C extends KeeperConfig> (
+export function createKeeper<T extends string, C extends KeeperConfig>(
   source: T,
-  config: C
+  conf?: C
 ): KeeperInstance<ParseRuleString<T, TransferKeeperExtendType<C>>, C> {
+  const config = conf || {} as C
   const properties = parse(source)
   const from = fromObject(properties, config)
   const read = readProperiteValue(properties, config)

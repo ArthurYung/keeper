@@ -40,7 +40,7 @@ jobs:
           git config --local user.name "GitHub Action"
       - run: echo "npm token=${{secrets.NPM_TOKEN}}"
       - run: npm run version
-      - run: npm publish --access public --provenance
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
       - run: git push
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

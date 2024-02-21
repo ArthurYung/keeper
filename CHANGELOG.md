@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.1 (2024-02-21)
+
+
+### Bug Fixes
+
+* change workflow index' ([e5cbcba](https://github.com/ArthurYung/keeper/commit/e5cbcba0af43c5c7884959c918c92423b26a97dd))
+
 ## 1.0.0 (2024-02-21)
 
 

@@ -1,18 +1,9 @@
 import { fromObject, readProperiteValue } from './api'
 import { parse } from './parser'
-import {
-  type KeeperInstance,
-  type KeeperConfig,
-  type TransferKeeperExtendType,
-  type ParseRuleString
-} from './type'
+import { type CreateInstance } from './type'
 
-export function createKeeper<T extends string, C extends KeeperConfig>(
-  source: T,
-  conf?: C
-): KeeperInstance<ParseRuleString<T, TransferKeeperExtendType<C>>, C> {
-  const config = conf || {} as C
-  const properties = parse(source)
+export const createKeeper: CreateInstance = (source, config = {} as any) => {
+  const properties = parse(source as string)
   const from = fromObject(properties, config)
   const read = readProperiteValue(properties, config)
 

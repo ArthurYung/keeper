@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
-import babel from '@rollup/plugin-babel'
+import babel from "@rollup/plugin-babel";
 
 export default defineConfig({
   build: {
@@ -11,23 +11,12 @@ export default defineConfig({
     },
     rollupOptions: {
       plugins: [
-          babel({
-              extensions: ['.js', '.ts'],
-              // babelHelpers: false,
-              // plugins: ['@babel/plugin-transform-runtime'],
-              presets: [
-                  [
-                      '@babel/preset-env',
-                      {
-                          useBuiltIns: false,
-                          corejs: false,
-                          targets: {
-                              browsers: ['ie > 9'],
-                          },
-                      },
-                  ],
-              ],
-          }),
+        babel({
+          extensions: [".js", ".ts"],
+          babelHelpers: "runtime",
+          plugins: ["@babel/plugin-transform-runtime"],
+          presets: ["@babel/preset-env", "@babel/preset-typescript"],
+        }),
       ],
     },
   },

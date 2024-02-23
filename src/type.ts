@@ -51,12 +51,12 @@ type GetType<
  *
  **/
 type ParseLine<Str extends string, Includes extends Object = {}> =
-  Trim<Str> extends `${infer Key} ${infer Type} ${infer Extensions}`
-    ? Extensions extends `copyas:${infer CopyName}`
+  Trim<Str> extends `${infer Key} ${infer Type} ${'copyas' | 'renamefrom'}:${infer ExtensionsValue}`
+    ? Str extends `${string} copyas:${string}`
       ? {
-          [x in Key | CopyName]: GetType<TrimLeft<Type>, Includes>;
+          [x in Key | ExtensionsValue]: GetType<Trim<Type>, Includes>;
         }
-      : { [x in Key]: GetType<TrimLeft<Type>, Includes> }
+      : { [x in Trim<Key>]: GetType<TrimLeft<Type>, Includes> }
     : Trim<Str> extends `${infer Key} ${infer Type}`
       ? { [x in Key]: GetType<TrimLeft<Type>, Includes> }
       : {}
@@ -67,7 +67,7 @@ type ParseLine<Str extends string, Includes extends Object = {}> =
  *
  * Support passing type inheritance as the second parameter.
  **/
-export type ParseRuleString<
+type ParseRuleString<
   Str extends string,
   Includes extends Object = {},
   Origins extends Object = {},
@@ -78,7 +78,7 @@ export type ParseRuleString<
 /**
  * Convert a struct with inheritance to a TypeScript interface type.
  **/
-export type TransferKeeperExtendType<Config extends KeeperConfig> =
+type TransferKeeperExtendType<Config extends KeeperConfig> =
   Config['extends'] extends Record<string, Omit<KeeperInstance, 'read'>>
     ? {
         [x in keyof Config['extends']]: ReturnType<
@@ -124,14 +124,29 @@ export interface KeeperConfig {
 }
 
 export interface KeeperInstance<
-  InstanceType extends any = {},
+  T extends string = '',
   Config extends KeeperConfig = {},
 > {
   properties: ProperiteItemMap
   config: Config
-  from: (source: any) => InstanceType
-  read: <P extends Expand<InstanceType>>(
+  from: (source: any) => ParseRuleString<T, TransferKeeperExtendType<Config>>
+  read: <
+    P extends Expand<ParseRuleString<T, TransferKeeperExtendType<Config>>>,
+  >(
     obj: any,
     path: P,
-  ) => GetPathType<P, InstanceType>
+  ) => GetPathType<P, ParseRuleString<T, TransferKeeperExtendType<Config>>>
 }
+
+export type CreateInstance = <
+  Input extends string,
+  Config extends KeeperConfig = {},
+>(
+  input: Input,
+  config?: Config,
+) => KeeperInstance<Input, Config>
+
+export type DefineKeeperInterface<T> =
+  T extends KeeperInstance<infer I, infer C>
+    ? ParseRuleString<I, TransferKeeperExtendType<C>>
+    : {}

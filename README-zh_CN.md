@@ -1,6 +1,6 @@
 # <a href align="center">Keeper JS</a>
 
-English  |  [简体中文](./README-zh_CN.md)
+简体中文  |  [English](./README.md)
 <p>
    <a href="https://www.npmjs.com/package/keeper-js">
     <img src="https://img.shields.io/npm/l/keeper-js.svg?sanitize=true" alt="License" />
@@ -16,13 +16,13 @@ English  |  [简体中文](./README-zh_CN.md)
   </a>
 </p>
 
-Keeper is a library for securely accessing properties of js objects.
+Keeper是一个用于安全访问js对象属性的库。
 
-It generates a Keeper instance by receiving a string describing the object type. Through the API provided by this instance, we can access data of the expected safe type, or create a new object that fully complies with the type description for use.
+它通过接收一个描述对象类型的字符串来生成一个守护者实例(Keeper)，通过这个实例提供的API，我们可以访问符合预期的安全数据类型，或者创建一个完全符合类型描述的新对象来使用。
 
-Keeper also has excellent TypeScript support. It can generate corresponding type declaration files based on the received type description string, eliminating the need to manually create these files.
+Keeper还具有出色的TypeScript支持。它可以根据接收到的类型描述字符串生成相应的类型声明文件，从而无需手动创建这些文件。
 
-Example:
+一个简单的例子：
 
 ```typescript
 const userKeeper = createKeeper(`
@@ -40,17 +40,18 @@ console.log(data) // { name: 'bruce', age: 18 }
 const age = userKeeper.read({ user_age: '18.2' }, 'age') // 18
 ```
 
-# 📦 Install
+
+
+# 📦 安装
 
 ```shell
 npm i keeper-js
 ````
 
-# 🔨 Usage
+# 🔨 使用
 
-### Type Description
-Keeper defines objects by receiving a string text describing the object. This string should follow the format below (extra spaces will be ignored):
-
+### 类型描述
+Keeper通过接收一个描述对象的字符串文本来定义对象，该字符串应遵循以下格式（多余空格会被忽略）：
 ```
 <property> <type> <extentions>
 ```
@@ -90,10 +91,10 @@ const data = human.from({
 // }
 ```
 
-### Object Access
-The Keeper instance provides two methods for data retrieval, `from(obj)` and `read(obj, path)`, which are used to generate a new object based on the type description and source object, and to get the value of the specified path in the source object according to the type description, respectively.
+### 对象访问
+Keeper实例提供两个方法用于获取数据，`from(obj)`和`read(obj, path)`分别用于根据类型描述和源对象生成一个新对象和根据类型描述获取源对象中指定path的值。
 
-When we need to safely get a value from an object, we can use the read API to operate, for example:
+当我们需要安全获取对象中的某个值时，可以用 `read` API 来操作，例如
 ```javascript
 const sourceData = {
   id: '1',
@@ -102,7 +103,8 @@ const sourceData = {
 }
 const name = human.read(sourceData, 'id') // 1
 ```
-This method supports multi-layer nested access, for example:
+
+该方法支持多层嵌套访问，例如：
 ```javascript
 const userInfo = createKeeper(`
    name    string
@@ -124,7 +126,7 @@ const name = human.read(sourceData, 'info.name') // 'bruce'
 const bro1Name = human.read(sourceData, 'bros[0].name') // 'bro1'
 ```
 
-When we expect to correct from the source data and get an object that fully conforms to the type declaration definition, we can use the `from` API to operate, for example:
+当我们期望从源数据修正并得到一个完全符合类型声明定义的对象时，可以用 `from` API 来操作，例如：
 ```javascript
 const sourceData = {
   id: '1',
@@ -133,7 +135,8 @@ const sourceData = {
 }
 human.from(sourceData) // { id: 1, bros: [], { name: 'bruce', age: 18 } }
 ```
-Note that when the original data is empty and the corresponding declared property is not an empty type (null|undefined), a default value will be given according to the declared type, for example:
+
+注意，当原数据为空并且对应声明属性不为空类型时（null|undefined），会根据声明的类型给出一个默认值，例如：
 ```javascript
 const sourceData = {
   id: '1',
@@ -144,26 +147,29 @@ human.from(sourceData) // { id: 1, bros: [], { name: '', age: 0 } }
 human.read(sourceData, 'bros[0].age') // 0
 ```
 
-### Typescript Support
-Keeper has good ts support. You can get ts types from the defined keeper instance through the exported `DefineKeeperInterface` type.
+### Typescript支持
+
+Keeper拥有良好的ts支持，可以通过导出的`DefineKeeperInterface`类型从定义的keeper实例获取ts类型
 ![Monosnap screencast 2024-02-24 01-12-58](https://github.com/ArthurYung/keeper/assets/29910365/3c754e2c-0d2e-47b1-a516-3c8448529923)
 
-In addition, the `from()` and `read()` methods also have good ts support:
+除此之外，`from()`和`read`方法也拥有良好的ts支持：
 ![Monosnap screencast 2024-02-24 01-22-08](https://github.com/ArthurYung/keeper/assets/29910365/682fe9fd-8619-4dd0-b8de-64cbe71f2b15)
 ![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
 
-# The supported types
-| Data Type |	JS Type |	Default |	Remarks |
+
+# 支持的类型
+| 数据类型 | 对于js类型 | 默认值 | 备注 |
 | ---- | --- | --- | --- |
 | bool | boolean | false | - |
-| int | number | 0 | Integer type |
-| float | number | 0 | Floating point type |
+| int | number | 0 | 整数类型 |
+| float | number | 0 | 浮点数类型 |
 | string | string | '' | - |
 | null | null | null | - |
 | undefined | undefined | undefined | - |
 | func | Function | () => {} | - |
 | object | Object | {} | - |
 
-# License
 
-[MIT](./LICENSE)。
+# 开源协议
+
+Keeper 遵循 [MIT 协议](./LICENSE)。

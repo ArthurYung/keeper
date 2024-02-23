@@ -12,3 +12,4 @@ rules:
   "@typescript-eslint/strict-boolean-expressions": 0
   "@typescript-eslint/explicit-function-return-type": 0
   "@typescript-eslint/no-unnecessary-type-constraint": 0
+  "@typescript-eslint/consistent-type-assertions": 0

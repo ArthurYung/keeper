@@ -49,6 +49,7 @@ function tokenizer (input: string = ''): string[][] {
   if (buffer) {
     buffers.push(buffer)
   }
+
   if (buffers.length) {
     result.push(buffers)
   }

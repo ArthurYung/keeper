@@ -2,25 +2,25 @@
 
 简体中文  |  [English](./README.md)
 <p>
-   <a href="https://www.npmjs.com/package/tdesign-react">
-    <img src="https://img.shields.io/npm/l/tdesign-react.svg?sanitize=true" alt="License" />
+   <a href="https://www.npmjs.com/package/keeper-js">
+    <img src="https://img.shields.io/npm/l/keeper-js.svg?sanitize=true" alt="License" />
   </a>
   <a href="https://codecov.io/gh/ArthurYung/keeper" >
     <img src="https://codecov.io/gh/ArthurYung/keeper/graph/badge.svg?token=93F49NOJ9E"/>
   </a>
-  <a href="https://www.npmjs.com/package/tdesign-react">
-    <img src="https://img.shields.io/npm/v/tdesign-react.svg?sanitize=true" alt="Version">
+  <a href="https://www.npmjs.com/package/keeper-js">
+    <img src="https://img.shields.io/npm/v/keeper-js.svg?sanitize=true" alt="Version">
   </a>
-  <a href="https://www.npmjs.com/package/tdesign-react">
-    <img src="https://img.shields.io/npm/dm/tdesign-react.svg?sanitize=true" alt="Downloads" />
+  <a href="https://www.npmjs.com/package/keeper-js">
+    <img src="https://img.shields.io/npm/dm/keeper-js.svg?sanitize=true" alt="Downloads" />
   </a>
 </p>
 
-Keeper是一个用于安全使用js对象属性的库。
+Keeper是一个用于安全访问js对象属性的库。
 
-它通过接收一个描述对象类型的字符串生成一个守护者实例(Keeper)，通过实例提供的api我们可以获得可以安全使用的数据类型，或是生成一个完全遵循类型描述的新对象。
+它通过接收一个描述对象类型的字符串来生成一个守护者实例(Keeper)，通过这个实例提供的API，我们可以访问符合预期的安全数据类型，或者创建一个完全符合类型描述的新对象来使用。
 
-它拥有良好的Typescript支持性，并且能根据所接收的类型描述字符串生成对应的类型声明文件，因此无需再次手动编写类型声明文件。
+Keeper还具有出色的TypeScript支持。它可以根据接收到的类型描述字符串生成相应的类型声明文件，从而无需手动创建这些文件。
 
 一个简单的例子：
 
@@ -50,15 +50,15 @@ npm i keeper-js
 
 # 🔨 使用
 
-## 类型描述
+### 类型描述
 Keeper通过接收一个描述对象的字符串文本来定义对象，该字符串应遵循以下格式（多余空格会被忽略）：
 ```
 <property> <type> <extentions>
 ```
 
-- <property>：属性名称，支持字符串或数字。
-- <type>：属性类型，可以是基础类型（如 string、int、float，详情见下文）或数组类型（如 int[]）。此外，也支持使用 `*<extends>` 格式来实现类型的嵌套
-- <extentions>（可选）：当前属性的额外描述，目前支持`<copyas>:<alias>`(复制当前类型为属性名为`<alias>`的新属性) 以及`<renamefrom>:<property>`(当前属性值从原始数据的`<property>`属性返回)
+- `<property>`：属性名称，支持字符串或数字。
+- `<type>`：属性类型，可以是基础类型（如 string、int、float，详情见下文）或数组类型（如 int[]）。此外，也支持使用 `*<extends>` 格式来实现类型的嵌套
+- `<extentions>`（可选）：当前属性的额外描述，目前支持`<copyas>:<alias>`(复制当前类型为属性名为`<alias>`的新属性) 以及`<renamefrom>:<property>`(当前属性值从源对象的`<property>`属性返回)
 
 示例：
 ```typescript
@@ -88,5 +88,63 @@ const data = human.from({
 //   }
 // }
 ```
+
+### 对象访问
+Keeper实例提供两个方法用于获取数据，`from(obj)`和`read(obj, path)`分别用于根据类型描述和源对象生成一个新对象和根据类型描述获取源对象中指定path的值。
+
+当我们需要安全获取对象中的某个值时，可以用 `read` API 来操作，例如
+```javascript
+const sourceData = {
+  id: '1',
+  scores:  ['80.1', '90'],
+  info: { name: 'bruce', user_age: '18.0' }
+}
+const name = human.read(sourceData, 'id') // 1
+```
+
+该方法支持多层嵌套访问，例如：
+```javascript
+const userInfo = createKeeper(`
+   name    string
+   age     int      renamefrom:user_age
+`);
+
+const human = createKeeper(`
+  id       int
+  bros     *userInfo[]
+  baseInfo *userInfo
+`, { extends: { userInfo } }) // Declare the inherited attributes of userInfo.
+
+const sourceData = {
+  id: '1',
+  bros: [{ name: 'bro1', user_age: '16.0' }, { name: 'bro2', user_age: '17.2' }],
+  info: { name: 'bruce', user_age: '18.1' }
+}
+const name = human.read(sourceData, 'info.name') // 'bruce'
+const bro1Name = human.read(sourceData, 'bros[0].name') // 'bro1'
+```
+
+当我们期望从源数据修正并得到一个完全符合类型声明定义的对象时，可以用 `from` API 来操作，例如：
+```javascript
+const sourceData = {
+  id: '1',
+  bros: [],
+  info: { name: 'bruce', user_age: '18.1' }
+}
+human.from(sourceData) // { id: 1, bros: [], { name: 'bruce', age: 18 } }
+```
+
+注意，当原数据为空并且对应声明属性不为空类型时（null|undefined），会根据声明的类型给出一个默认值，例如：
+```javascript
+const sourceData = {
+  id: '1',
+  bros: [],
+  info: {}
+}
+human.from(sourceData) // { id: 1, bros: [], { name: '', age: 0 } }
+human.read(sourceData, 'bros[0].age') // 0
+```
+
+### Typescript支持
 
 

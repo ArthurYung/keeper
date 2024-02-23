@@ -62,6 +62,8 @@ Keeper通过接收一个描述对象的字符串文本来定义对象，该字�
 
 示例：
 ```typescript
+import { createKeeper } from 'keeper-js';
+
 const userInfo = createKeeper(`
    name    string
    age     int      renamefrom:user_age
@@ -147,4 +149,27 @@ human.read(sourceData, 'bros[0].age') // 0
 
 ### Typescript支持
 
+Keeper拥有良好的ts支持，可以通过导出的`DefineKeeperInterface`类型从定义的keeper实例获取ts类型
+![Monosnap screencast 2024-02-24 01-12-58](https://github.com/ArthurYung/keeper/assets/29910365/3c754e2c-0d2e-47b1-a516-3c8448529923)
 
+除此之外，`from()`和`read`方法也拥有良好的ts支持：
+![Monosnap screencast 2024-02-24 01-22-08](https://github.com/ArthurYung/keeper/assets/29910365/682fe9fd-8619-4dd0-b8de-64cbe71f2b15)
+![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
+
+
+# 支持的类型
+| 数据类型 | 对于js类型 | 默认值 | 备注 |
+| ---- | --- | --- | --- |
+| bool | boolean | false | - |
+| int | number | 0 | 整数类型 |
+| float | number | 0 | 浮点数类型 |
+| string | string | '' | - |
+| null | null | null | - |
+| undefined | undefined | undefined | - |
+| func | Function | () => {} | - |
+| object | Object | {} | - |
+
+
+# 开源协议
+
+Keeper 遵循 [MIT 协议](./LICENSE)。

@@ -55,11 +55,13 @@ Keeper defines objects by receiving a string text describing the object. This st
 <property> <type> <extentions>
 ```
 
-- `<property>`：属性名称，支持字符串或数字。
-- `<type>`：属性类型，可以是基础类型（如 string、int、float，详情见下文）或数组类型（如 int[]）。此外，也支持使用 `*<extends>` 格式来实现类型的嵌套
-- `<extentions>`（可选）：当前属性的额外描述，目前支持`<copyas>:<alias>`(复制当前类型为属性名为`<alias>`的新属性) 以及`<renamefrom>:<property>`(当前属性值从源对象的`<property>`属性返回)
+- `<property>`: Property name, supporting strings or numbers.
+- `<type>`: Property type, which can be a basic type (such as string, int, float, see details below) or an array type (such as int[]). In addition, it also supports using `*<extends>` format to implement nested types.
+- `<extensions>` (optional): Additional descriptions of the current property, currently supporting `<copyas>:<alias>` (copy the current type as a new property named `<alias>`) and `<renamefrom>:<property>` (the current property value returns from the `<property>` property of the source object).
 
-示例：
+
+Example:
+
 ```typescript
 import { createKeeper } from 'keeper-js';
 

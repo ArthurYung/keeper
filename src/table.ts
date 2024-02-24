@@ -52,8 +52,3 @@ export enum SymbolExtensionTable {
   RENAME = 'renamefrom',
   COPY = 'copyas',
 }
-
-export enum SymbolTokenTable {
-  SPACE = ' ',
-  BREAK = '\n',
-}

@@ -1,0 +1,222 @@
+export const testData10 = `
+      name string
+      age int
+      key1 int
+      key3 string
+      key4 float[]
+      key5 string
+      key6 void
+      key7 int  
+      key8 float 
+`;
+
+export const extendsTestData = `
+  name string
+  age int
+  extend1 *testData
+  extend2 *testData
+  extend3 *testData
+  extend4 *testData
+  extend5 *testData[]
+  extend6 *testData
+  extend7 *testData    
+  extend8 *testData    
+`;
+
+export const testData100 = `
+name string
+key1 int
+key2 int
+key3 int
+key4 int
+key5 int
+key6 int
+key7 int
+key8 int
+key9 int
+key10 int
+key11 int
+key12 int
+key13 int
+key14 int
+key15 int
+key16 int
+key17 int
+key18 int
+key19 int
+key20 int
+key21 int
+key22 int
+key23 int
+key24 int
+key25 int
+key26 int
+key27 int
+key28 int
+key29 int
+key30 int
+key31 int
+key32 int
+key33 int
+key34 int
+key35 int
+key36 int
+key37 int
+key38 int
+key39 int
+key40 int
+key41 int
+key42 int
+key43 int
+key44 int
+key45 int
+key46 int
+key47 int
+key48 int
+key49 int
+key50 int
+key51 int
+key52 int
+key53 int
+key54 int
+key55 int
+key56 int
+key57 int
+key58 int
+key59 int
+key60 int
+key61 int
+key62 int
+key63 int
+key64 int
+key65 int
+key66 int
+key67 int
+key68 int
+key69 int
+key70 int
+key71 int
+key72 int
+key73 int
+key74 int
+key75 int
+key76 int
+key77 int
+key78 int
+key79 int
+key80 int
+key81 int
+key82 int
+key83 int
+key84 int
+key85 int
+key86 int
+key87 int
+key88 int
+key89 int
+key90 int
+key91 int
+key92 int
+key93 int
+key94 int
+key95 int
+key96 int
+key97 int
+key98 int
+key99 int
+key100 int
+`;
+
+export const test100Object = {
+  name: "string",
+  key1: "int",
+  key2: 1,
+  key3: 1,
+  key4: 1,
+  key5: 1,
+
+  key6: 1,
+  key7: 1,
+  key8: 1,
+  key9: 1,
+  key10: 1,
+  key11: 1,
+  key12: 1,
+  key13: 1,
+  key14: 1,
+  key15: 1,
+  key16: 1,
+  key17: 1,
+  key18: 1,
+  key19: 1,
+  key20: 1,
+  key21: 1,
+  key22: 1,
+  key23: 1,
+  key24: 1,
+  key25: 1,
+  key26: 1,
+  key27: 1,
+  key28: 1,
+  key29: 1,
+  key30: 1,
+  key31: 1,
+  key32: 1,
+  key33: 1,
+  key34: 1,
+  key35: 1,
+  key36: 1,
+  key37: 1,
+  key38: 1,
+  key39: 1,
+  key40: 1,
+  key41: 1,
+  key42: 1,
+  key43: 1,
+  key44: 1,
+  key45: 1,
+  key46: 1,
+  key47: 1,
+  key48: 1,
+  key49: 1,
+  key50: 1,
+  key51: 1,
+  key52: 1,
+  key53: 1,
+  key54: 1,
+  key55: 1,
+  key56: 1,
+  key57: 1,
+  key58: 1,
+  key59: 1,
+  key60: 1,
+  key61: 1,
+  key62: 1,
+  key63: 1,
+  key64: 1,
+  key65: 1,
+  key66: 1,
+  key67: 1,
+  key68: 1,
+  key69: 1,
+  key70: 1,
+  key71: 1,
+  key72: 1,
+  key73: 1,
+  key74: 1,
+  key75: 1,
+  key76: 1,
+  key78: "30.q",
+  key79: 1,
+  key80: 1,
+  key81: 1,
+  key82: 1,
+  key83: 1,
+  key84: 1,
+  key85: 1,
+  key86: 1,
+  key87: 1,
+  key88: 1,
+  key89: 1,
+  key90: 1,
+};

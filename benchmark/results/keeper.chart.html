@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <title>Keeper JS Benchmark</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ddd;
+      }
+
+      .container {
+        box-sizing: border-box;
+        height: 96vh;
+        width: 96vw;
+        margin: 2vh 2vw;
+        resize: both;
+        overflow: hidden;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 15px #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="chart1708799385826" width="16" height="9"></canvas>
+    </div>
+    <script>
+      const format = (num) => {
+        const [whole, fraction] = String(num).split('.')
+        const chunked = []
+        whole
+          .split('')
+          .reverse()
+          .forEach((char, index) => {
+            if (index % 3 === 0) {
+              chunked.unshift([char])
+            } else {
+              chunked[0].unshift(char)
+            }
+          })
+
+        const fractionStr = fraction !== undefined ? '.' + fraction : ''
+
+        return (
+          chunked.map((chunk) => chunk.join('')).join(' ') + fractionStr
+        )
+      }
+      const ctx1708799385826 = document
+        .getElementById('chart1708799385826')
+        .getContext('2d')
+      const chart1708799385826 = new Chart(ctx1708799385826, {
+        type: 'bar',
+        data: {
+          labels: ["parse 10 properties string","parse 100 properties string","parse extends properties string","create 100 properties object","create 100 properties object from target srouce","create object with extends properties(100 * 8)","lodash clone deep (100 * 8)","create object with deep extends properties(100 * 8 * 8)","lodash clone deep (100 * 8 * 8)","read properties"],
+          datasets: [
+            {
+              data: [402193,40558,357297,159995,155270,24499,14937,3493,2085,3399092],
+              backgroundColor: ["hsl(14.195999999999998, 85%, 55%)","hsl(1.4279999999999973, 85%, 55%)","hsl(12.612000000000007, 85%, 55%)","hsl(5.651999999999993, 85%, 55%)","hsl(5.483999999999992, 85%, 55%)","hsl(0.8639999999999987, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.11999999999999318, 85%, 55%)","hsl(0.07200000000000273, 85%, 55%)","hsl(120, 85%, 55%)"],
+              borderColor: ["hsl(14.195999999999998, 85%, 55%)","hsl(1.4279999999999973, 85%, 55%)","hsl(12.612000000000007, 85%, 55%)","hsl(5.651999999999993, 85%, 55%)","hsl(5.483999999999992, 85%, 55%)","hsl(0.8639999999999987, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.11999999999999318, 85%, 55%)","hsl(0.07200000000000273, 85%, 55%)","hsl(120, 85%, 55%)"],
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Keeper JS Benchmark',
+              font: { size: 20 },
+              padding: 20,
+            },
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  return format(context.parsed.y) + ' ops/s'
+                },
+              },
+              displayColors: false,
+              backgroundColor: '#222222',
+              padding: 10,
+              cornerRadius: 5,
+              intersect: false,
+            },
+          },
+          scales: {
+            x: {
+              grid: {
+                color: '#888888',
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Operations per second',
+                padding: 10,
+              },
+              grid: {
+                color: '#888888',
+              },
+            },
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

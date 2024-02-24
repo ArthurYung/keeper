@@ -1,6 +1,7 @@
 # <a href align="center">Keeper JS</a>
 
-English  |  [简体中文](./README-zh_CN.md)
+English | [简体中文](./README-zh_CN.md)
+
 <p>
    <a href="https://www.npmjs.com/package/keeper-js">
     <img src="https://img.shields.io/npm/l/keeper-js.svg?sanitize=true" alt="License" />
@@ -36,19 +37,20 @@ const data = userKeeper.from({
   user_age: "18.0",
 });
 
-console.log(data) // { name: 'bruce', age: 18 }
-const age = userKeeper.read({ user_age: '18.2' }, 'age') // 18
+console.log(data); // { name: 'bruce', age: 18 }
+const age = userKeeper.read({ user_age: "18.2" }, "age"); // 18
 ```
 
 # 📦 Install
 
 ```shell
 npm i keeper-js
-````
+```
 
 # 🔨 Usage
 
 ### Type Description
+
 Keeper defines objects by receiving a string text describing the object. This string should follow the format below (extra spaces will be ignored):
 
 ```
@@ -59,31 +61,33 @@ Keeper defines objects by receiving a string text describing the object. This st
 - `<type>`: Property type, which can be a basic type (such as string, int, float, see details below) or an array type (such as int[]). In addition, it also supports using `*<extends>` format to implement nested types.
 - `<extensions>` (optional): Additional descriptions of the current property, currently supporting `<copyas>:<alias>` (copy the current type as a new property named `<alias>`) and `<renamefrom>:<property>` (the current property value returns from the `<property>` property of the source object).
 
-
 Example:
 
 ```typescript
-import { createKeeper } from 'keeper-js';
+import { createKeeper } from "keeper-js";
 
 const userInfo = createKeeper(`
    name    string
    age     int      renamefrom:user_age
 `);
 
-const human = createKeeper(`
+const human = createKeeper(
+  `
   id      int
   scores  float[]
   info    *userInfo
-`, { extends: { userInfo } }) // Declare the inherited attributes of userInfo.
+`,
+  { extends: { userInfo } },
+); // Declare the inherited attributes of userInfo.
 
 const data = human.from({
-  id: '1',
-  scores:  ['80.1', '90'],
-  info: { name: 'bruce', user_age: '18.0' }
+  id: "1",
+  scores: ["80.1", "90"],
+  info: { name: "bruce", user_age: "18.0" },
 });
 
 // data: {
-//   id: 1, 
+//   id: 1,
 //   scores: [80.1, 90], // Transform string into float number.
 //   info: {
 //     name: 'bruce',
@@ -93,60 +97,74 @@ const data = human.from({
 ```
 
 ### Object Access
+
 The Keeper instance provides two methods for data retrieval, `from(obj)` and `read(obj, path)`, which are used to generate a new object based on the type description and source object, and to get the value of the specified path in the source object according to the type description, respectively.
 
 When we need to safely get a value from an object, we can use the read API to operate, for example:
+
 ```javascript
 const sourceData = {
-  id: '1',
-  scores:  ['80.1', '90'],
-  info: { name: 'bruce', user_age: '18.0' }
-}
-const name = human.read(sourceData, 'id') // 1
+  id: "1",
+  scores: ["80.1", "90"],
+  info: { name: "bruce", user_age: "18.0" },
+};
+const name = human.read(sourceData, "id"); // 1
 ```
+
 This method supports multi-layer nested access, for example:
+
 ```javascript
 const userInfo = createKeeper(`
    name    string
    age     int      renamefrom:user_age
 `);
 
-const human = createKeeper(`
+const human = createKeeper(
+  `
   id       int
   bros     *userInfo[]
   baseInfo *userInfo
-`, { extends: { userInfo } }) // Declare the inherited attributes of userInfo.
+`,
+  { extends: { userInfo } },
+); // Declare the inherited attributes of userInfo.
 
 const sourceData = {
-  id: '1',
-  bros: [{ name: 'bro1', user_age: '16.0' }, { name: 'bro2', user_age: '17.2' }],
-  info: { name: 'bruce', user_age: '18.1' }
-}
-const name = human.read(sourceData, 'info.name') // 'bruce'
-const bro1Name = human.read(sourceData, 'bros[0].name') // 'bro1'
+  id: "1",
+  bros: [
+    { name: "bro1", user_age: "16.0" },
+    { name: "bro2", user_age: "17.2" },
+  ],
+  info: { name: "bruce", user_age: "18.1" },
+};
+const name = human.read(sourceData, "info.name"); // 'bruce'
+const bro1Name = human.read(sourceData, "bros[0].name"); // 'bro1'
 ```
 
 When we expect to correct from the source data and get an object that fully conforms to the type declaration definition, we can use the `from` API to operate, for example:
+
 ```javascript
 const sourceData = {
-  id: '1',
+  id: "1",
   bros: [],
-  info: { name: 'bruce', user_age: '18.1' }
-}
-human.from(sourceData) // { id: 1, bros: [], { name: 'bruce', age: 18 } }
+  info: { name: "bruce", user_age: "18.1" },
+};
+human.from(sourceData); // { id: 1, bros: [], { name: 'bruce', age: 18 } }
 ```
+
 Note that when the original data is empty and the corresponding declared property is not an empty type (null|undefined), a default value will be given according to the declared type, for example:
+
 ```javascript
 const sourceData = {
-  id: '1',
+  id: "1",
   bros: [],
-  info: {}
-}
-human.from(sourceData) // { id: 1, bros: [], { name: '', age: 0 } }
-human.read(sourceData, 'bros[0].age') // 0
+  info: {},
+};
+human.from(sourceData); // { id: 1, bros: [], { name: '', age: 0 } }
+human.read(sourceData, "bros[0].age"); // 0
 ```
 
 ### Typescript Support
+
 Keeper has good ts support. You can get ts types from the defined keeper instance through the exported `DefineKeeperInterface` type.
 ![Monosnap screencast 2024-02-24 01-12-58](https://github.com/ArthurYung/keeper/assets/29910365/3c754e2c-0d2e-47b1-a516-3c8448529923)
 
@@ -155,16 +173,23 @@ In addition, the `from()` and `read()` methods also have good ts support:
 ![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
 
 # The supported types
-| Data Type |	JS Type |	Default |	Remarks |
-| ---- | --- | --- | --- |
-| bool | boolean | false | - |
-| int | number | 0 | Integer type |
-| float | number | 0 | Floating point type |
-| string | string | '' | - |
-| null | null | null | - |
-| undefined | undefined | undefined | - |
-| func | Function | () => {} | - |
-| object | Object | {} | - |
+
+| Data Type | JS Type   | Default   | Remarks             |
+| --------- | --------- | --------- | ------------------- |
+| bool      | boolean   | false     | -                   |
+| int       | number    | 0         | Integer type        |
+| float     | number    | 0         | Floating point type |
+| string    | string    | ''        | -                   |
+| null      | null      | null      | -                   |
+| undefined | undefined | undefined | -                   |
+| func      | Function  | () => {}  | -                   |
+| object    | Object    | {}        | -                   |
+
+# Benchmark
+
+Files: `benchmark/index.js`
+
+result: [benchmark.html](https://arthuryung.github.io/keeper/benchmark/results/keeper.chart.html)
 
 # License
 

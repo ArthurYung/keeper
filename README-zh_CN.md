@@ -1,6 +1,7 @@
 # <a href align="center">Keeper JS</a>
 
-简体中文  |  [English](./README.md)
+简体中文 | [English](./README.md)
+
 <p>
    <a href="https://www.npmjs.com/package/keeper-js">
     <img src="https://img.shields.io/npm/l/keeper-js.svg?sanitize=true" alt="License" />
@@ -36,22 +37,22 @@ const data = userKeeper.from({
   user_age: "18.0",
 });
 
-console.log(data) // { name: 'bruce', age: 18 }
-const age = userKeeper.read({ user_age: '18.2' }, 'age') // 18
+console.log(data); // { name: 'bruce', age: 18 }
+const age = userKeeper.read({ user_age: "18.2" }, "age"); // 18
 ```
-
-
 
 # 📦 安装
 
 ```shell
 npm i keeper-js
-````
+```
 
 # 🔨 使用
 
 ### 类型描述
+
 Keeper通过接收一个描述对象的字符串文本来定义对象，该字符串应遵循以下格式（多余空格会被忽略）：
+
 ```
 <property> <type> <extentions>
 ```
@@ -61,28 +62,32 @@ Keeper通过接收一个描述对象的字符串文本来定义对象，该字�
 - `<extentions>`（可选）：当前属性的额外描述，目前支持`<copyas>:<alias>`(复制当前类型为属性名为`<alias>`的新属性) 以及`<renamefrom>:<property>`(当前属性值从源对象的`<property>`属性返回)
 
 示例：
+
 ```typescript
-import { createKeeper } from 'keeper-js';
+import { createKeeper } from "keeper-js";
 
 const userInfo = createKeeper(`
    name    string
    age     int      renamefrom:user_age
 `);
 
-const human = createKeeper(`
+const human = createKeeper(
+  `
   id      int
   scores  float[]
   info    *userInfo
-`, { extends: { userInfo } }) // Declare the inherited attributes of userInfo.
+`,
+  { extends: { userInfo } },
+); // Declare the inherited attributes of userInfo.
 
 const data = human.from({
-  id: '1',
-  scores:  ['80.1', '90'],
-  info: { name: 'bruce', user_age: '18.0' }
+  id: "1",
+  scores: ["80.1", "90"],
+  info: { name: "bruce", user_age: "18.0" },
 });
 
 // data: {
-//   id: 1, 
+//   id: 1,
 //   scores: [80.1, 90], // Transform string into float number.
 //   info: {
 //     name: 'bruce',
@@ -92,59 +97,70 @@ const data = human.from({
 ```
 
 ### 对象访问
+
 Keeper实例提供两个方法用于获取数据，`from(obj)`和`read(obj, path)`分别用于根据类型描述和源对象生成一个新对象和根据类型描述获取源对象中指定path的值。
 
 当我们需要安全获取对象中的某个值时，可以用 `read` API 来操作，例如
+
 ```javascript
 const sourceData = {
-  id: '1',
-  scores:  ['80.1', '90'],
-  info: { name: 'bruce', user_age: '18.0' }
-}
-const name = human.read(sourceData, 'id') // 1
+  id: "1",
+  scores: ["80.1", "90"],
+  info: { name: "bruce", user_age: "18.0" },
+};
+const name = human.read(sourceData, "id"); // 1
 ```
 
 该方法支持多层嵌套访问，例如：
+
 ```javascript
 const userInfo = createKeeper(`
    name    string
    age     int      renamefrom:user_age
 `);
 
-const human = createKeeper(`
+const human = createKeeper(
+  `
   id       int
   bros     *userInfo[]
   baseInfo *userInfo
-`, { extends: { userInfo } }) // Declare the inherited attributes of userInfo.
+`,
+  { extends: { userInfo } },
+); // Declare the inherited attributes of userInfo.
 
 const sourceData = {
-  id: '1',
-  bros: [{ name: 'bro1', user_age: '16.0' }, { name: 'bro2', user_age: '17.2' }],
-  info: { name: 'bruce', user_age: '18.1' }
-}
-const name = human.read(sourceData, 'info.name') // 'bruce'
-const bro1Name = human.read(sourceData, 'bros[0].name') // 'bro1'
+  id: "1",
+  bros: [
+    { name: "bro1", user_age: "16.0" },
+    { name: "bro2", user_age: "17.2" },
+  ],
+  info: { name: "bruce", user_age: "18.1" },
+};
+const name = human.read(sourceData, "info.name"); // 'bruce'
+const bro1Name = human.read(sourceData, "bros[0].name"); // 'bro1'
 ```
 
 当我们期望从源数据修正并得到一个完全符合类型声明定义的对象时，可以用 `from` API 来操作，例如：
+
 ```javascript
 const sourceData = {
-  id: '1',
+  id: "1",
   bros: [],
-  info: { name: 'bruce', user_age: '18.1' }
-}
-human.from(sourceData) // { id: 1, bros: [], { name: 'bruce', age: 18 } }
+  info: { name: "bruce", user_age: "18.1" },
+};
+human.from(sourceData); // { id: 1, bros: [], { name: 'bruce', age: 18 } }
 ```
 
 注意，当原数据为空并且对应声明属性不为空类型时（null|undefined），会根据声明的类型给出一个默认值，例如：
+
 ```javascript
 const sourceData = {
-  id: '1',
+  id: "1",
   bros: [],
-  info: {}
-}
-human.from(sourceData) // { id: 1, bros: [], { name: '', age: 0 } }
-human.read(sourceData, 'bros[0].age') // 0
+  info: {},
+};
+human.from(sourceData); // { id: 1, bros: [], { name: '', age: 0 } }
+human.read(sourceData, "bros[0].age"); // 0
 ```
 
 ### Typescript支持
@@ -156,19 +172,24 @@ Keeper拥有良好的ts支持，可以通过导出的`DefineKeeperInterface`类�
 ![Monosnap screencast 2024-02-24 01-22-08](https://github.com/ArthurYung/keeper/assets/29910365/682fe9fd-8619-4dd0-b8de-64cbe71f2b15)
 ![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
 
-
 # 支持的类型
-| 数据类型 | 对于js类型 | 默认值 | 备注 |
-| ---- | --- | --- | --- |
-| bool | boolean | false | - |
-| int | number | 0 | 整数类型 |
-| float | number | 0 | 浮点数类型 |
-| string | string | '' | - |
-| null | null | null | - |
-| undefined | undefined | undefined | - |
-| func | Function | () => {} | - |
-| object | Object | {} | - |
 
+| 数据类型  | 对于js类型 | 默认值    | 备注       |
+| --------- | ---------- | --------- | ---------- |
+| bool      | boolean    | false     | -          |
+| int       | number     | 0         | 整数类型   |
+| float     | number     | 0         | 浮点数类型 |
+| string    | string     | ''        | -          |
+| null      | null       | null      | -          |
+| undefined | undefined  | undefined | -          |
+| func      | Function   | () => {}  | -          |
+| object    | Object     | {}        | -          |
+
+# Benchmark
+
+Files: `benchmark/index.js`
+
+result: [benchmark.html](https://arthuryung.github.io/keeper/benchmark/results/keeper.chart.html)
 
 # 开源协议
 

@@ -1,8 +1,4 @@
-import {
-  SymbolExtensionTable,
-  SymbolTokenTable,
-  SymbolTypeTable
-} from './table'
+import { type SymbolExtensionTable, SymbolTypeTable } from './table'
 
 export interface ProperiteItem {
   type: string
@@ -25,36 +21,10 @@ export type ProperiteItemMap = Map<string, ProperiteItem>
  * // => [['key1', 'bool'], ['key2', 'int']]
  **/
 function tokenizer (input: string = ''): string[][] {
-  const result: string[][] = []
-  let buffers: string[] = []
-  let buffer = ''
-
-  for (const char of input) {
-    if (char === SymbolTokenTable.SPACE || char === SymbolTokenTable.BREAK) {
-      if (buffer) {
-        buffers.push(buffer)
-        buffer = ''
-      }
-
-      if (char === SymbolTokenTable.BREAK && buffers.length) {
-        result.push(buffers)
-        buffers = []
-      }
-    } else {
-      buffer += char
-    }
-  }
-
-  // Handle remaining characters in buffer and buffers
-  if (buffer) {
-    buffers.push(buffer)
-  }
-
-  if (buffers.length) {
-    result.push(buffers)
-  }
-
-  return result
+  return input
+    .split('\n')
+    .map((line) => line.match(/([^\s]+)/g))
+    .filter(Boolean) as string[][]
 }
 
 /**
@@ -77,7 +47,7 @@ function compile (tokens: string[][]) {
   const properites = new Map<string, ProperiteItem>()
   for (const token of tokens) {
     const properite = parseToken(token)
-    const extensions = parseExtension(token[2])
+    const extensions = token[2] ? parseExtension(token[2]) : {}
 
     // rename the property from the specified name.
     if (extensions.renamefrom) {
@@ -121,14 +91,10 @@ function parseType (value: string) {
 
 function parseExtension (extension = '') {
   const extensions: { [x in SymbolExtensionTable]?: string } = {}
-  const [key, value] = extension.split(':')
+  const result = extension.match(/(copyas|renamefrom):(.+)$/)
 
-  if (key === SymbolExtensionTable.RENAME) {
-    extensions[SymbolExtensionTable.RENAME] = value
-  }
-
-  if (key === SymbolExtensionTable.COPY) {
-    extensions[SymbolExtensionTable.COPY] = value
+  if (result) {
+    extensions[result[1] as SymbolExtensionTable] = result[2]
   }
 
   return extensions

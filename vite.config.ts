@@ -13,9 +13,12 @@ export default defineConfig({
       plugins: [
         babel({
           extensions: [".js", ".ts"],
-          babelHelpers: "runtime",
-          plugins: ["@babel/plugin-transform-runtime"],
-          presets: ["@babel/preset-env", "@babel/preset-typescript"],
+          // babelHelpers: "runtime",
+          // plugins: ["@babel/plugin-transform-runtime"],
+          presets: [
+            ["@babel/preset-env", { targets: ["ie > 9"] }],
+            "@babel/preset-typescript",
+          ],
         }),
       ],
     },

@@ -149,3 +149,45 @@ key2 *keeper1[]
     }
   `)
 })
+
+test('deep extend property', ({ expect }) => {
+  const extendSource = createKeeper(
+    `
+sourcekey1 bool
+sourcekey2 int
+
+`,
+    {}
+  )
+
+  const extendDeep = createKeeper(
+    `
+key1 string
+key2 *extend
+`,
+    { extends: { extend: extendSource } }
+  )
+
+  const keeper = createKeeper(
+    `
+key1 string
+key2 *extend
+`,
+    {
+      extends: { extend: extendDeep }
+    }
+  )
+
+  expect(keeper.from({})).toMatchInlineSnapshot(`
+    {
+      "key1": "",
+      "key2": {
+        "key1": "",
+        "key2": {
+          "sourcekey1": false,
+          "sourcekey2": 0,
+        },
+      },
+    }
+  `)
+})

@@ -37,15 +37,6 @@ Benchmark.suite(
       },
     });
   }),
-  Benchmark.add("lazy parse extends properties string", function () {
-    createKeeper(extendsTestData, {
-      extends: {
-        testData: test100Object,
-      },
-      lazy: true,
-    });
-  }),
-
   Benchmark.add("create 100 properties object", function () {
     test100Object.from({});
   }),
@@ -67,11 +58,29 @@ Benchmark.suite(
   Benchmark.add("lodash clone deep (100 * 8 * 8)", () => {
     cloneDeep(testDeepExtendsObject);
   }),
-  Benchmark.add("read properties", () => {
-    extendsObject2.read({}, "extend1.extend1.name");
-  }),
   // add listeners
   Benchmark.cycle(), //.on("cycle", function (event) {
   Benchmark.complete(),
   Benchmark.save({ file: "keeper", format: "chart.html" }),
+);
+
+Benchmark.suite(
+  "Benchmark Lazy & Benchmark Raed",
+
+  Benchmark.add("lazy parse extends properties string", function () {
+    createKeeper(extendsTestData, {
+      extends: {
+        testData: test100Object,
+      },
+      lazy: true,
+    });
+  }),
+
+  Benchmark.add("read properties", () => {
+    extendsObject2.read({}, "extend1.extend1.name");
+  }),
+
+  Benchmark.cycle(), //.on("cycle", function (event) {
+  Benchmark.complete(),
+  Benchmark.save({ file: "keeper-lazy", format: "chart.html" }),
 );

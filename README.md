@@ -207,7 +207,7 @@ userInfo.properties.has("name"); // true
 
 Files: `benchmark/index.js`
 
-result: [benchmark.html](https://arthuryung.github.io/keeper/benchmark/results/keeper.chart.html)
+result: [benchmark.html](https://arthuryung.github.io/keeper/benchmark/results/keeper.chart.html) [lazy.api.html](https://arthuryung.github.io/keeper/benchmark/results/keeper-lazy.chart.html)
 
 # License
 

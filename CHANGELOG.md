@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.2 (2024-02-25)
+
+
+### Bug Fixes
+
+* Object assign properite target ([e4eb647](https://github.com/ArthurYung/keeper/commit/e4eb6477a49d20c47ef73702f0ef885e45add630))
+
 ### 1.2.1 (2024-02-25)
 
 

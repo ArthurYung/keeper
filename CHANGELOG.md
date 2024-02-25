@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.4 (2024-02-25)
+
+
+### Bug Fixes
+
+* rename benchmark ([3797f24](https://github.com/ArthurYung/keeper/commit/3797f24692557f1d58cfac70b0aae19ad1926dff))
+
 ### 1.2.3 (2024-02-25)
 
 

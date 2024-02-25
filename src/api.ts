@@ -34,7 +34,7 @@ function getPropertieReader (
   }
 
   const extendConfig = config.extends?.[propertie.type]
-  console.log(extendConfig)
+
   if (!extendConfig?.properties) {
     return null
   }

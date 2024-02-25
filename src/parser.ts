@@ -71,7 +71,7 @@ function compile (tokens: string[][], map: Map<string, ProperiteItem>) {
       // create a new property item and inherit the currently parsed property.
       map.set(
         extensions.copyas,
-        Object.assign(properite, {
+        Object.assign({}, properite, {
           name: extensions.copyas
         })
       )

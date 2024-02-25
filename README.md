@@ -172,6 +172,24 @@ In addition, the `from()` and `read()` methods also have good ts support:
 ![Monosnap screencast 2024-02-24 01-22-08](https://github.com/ArthurYung/keeper/assets/29910365/682fe9fd-8619-4dd0-b8de-64cbe71f2b15)
 ![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
 
+### Lazy Parsing
+
+The second parameter of `createKeeper` can be set to `lazy` as `true`. In this way, the Keeper will parse the type only at the first access, rather than parsing it at creation.
+
+```javascript
+const userInfo = createKeeper(
+  `
+  name    string
+  age     int      renamefrom:user_age
+`,
+  { lazy: true },
+);
+
+userInfo.properties.has("name"); // false
+userInfo.get({ name: "bruce", user_age: "18.0" }, "name");
+userInfo.properties.has("name"); // true
+```
+
 # The supported types
 
 | Data Type | JS Type   | Default   | Remarks             |

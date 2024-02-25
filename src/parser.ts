@@ -10,6 +10,20 @@ export interface ProperiteItem {
 
 export type ProperiteItemMap = Map<string, ProperiteItem>
 
+export function createProperiteItemMap (source: string) {
+  const map = new Map<string, ProperiteItem>()
+  let initialized = false
+  map._lazySource = () => {
+    if (initialized) {
+      return
+    }
+    initialized = true
+    compile(tokenizer(source), map)
+  }
+
+  return map
+}
+
 /*
  * Parse the string into an array of tokens based on spaces and line breaks.
  *
@@ -39,15 +53,14 @@ function tokenizer (input: string = ''): string[][] {
  * // => Map {
  * //   'key1' => { key: 'key1', type: 'bool', name: 'key1' },
  * //   'key2' => { key: 'key2', type: 'int', name: 'source1' },
- * //  'key3' => { key: 'key3', type: 'int', name: 'key3' },
+ * //   'key3' => { key: 'key3', type: 'int', name: 'key3' },
  * //   'key4' => { key: 'key3', type: 'int', name: 'key4' }
  * // }
  **/
-function compile (tokens: string[][]) {
-  const properites = new Map<string, ProperiteItem>()
-  for (const token of tokens) {
-    const properite = parseToken(token)
-    const extensions = token[2] ? parseExtension(token[2]) : {}
+function compile (tokens: string[][], map: Map<string, ProperiteItem>) {
+  for (let i = 0; i < tokens.length; i++) {
+    const properite = parseToken(tokens[i])
+    const extensions = tokens[i][2] ? parseExtension(tokens[i][2]) : {}
 
     // rename the property from the specified name.
     if (extensions.renamefrom) {
@@ -56,16 +69,18 @@ function compile (tokens: string[][]) {
 
     if (extensions.copyas) {
       // create a new property item and inherit the currently parsed property.
-      properites.set(extensions.copyas, {
-        ...properite,
-        name: extensions.copyas
-      })
+      map.set(
+        extensions.copyas,
+        Object.assign(properite, {
+          name: extensions.copyas
+        })
+      )
     }
 
-    properites.set(properite.name, properite)
+    map.set(properite.name, properite)
   }
 
-  return properites
+  return map
 }
 
 function parseType (value: string) {
@@ -140,8 +155,10 @@ function parseToken (token: string[]) {
  * //   'key5' => { key: 'key5', type: 'string', name: 'key5', isArray: true },
  * //   'key6' => { key: 'key6', type: 'other', name: 'key6', isExtend: true }
  **/
-export function parse (chars: string = '') {
-  const tokens = tokenizer(chars)
-  const properites = compile(tokens)
+export function parse (chars: string = '', lazy = false) {
+  const properites = createProperiteItemMap(chars)
+  if (!lazy) {
+    properites._lazySource()
+  }
   return properites
 }

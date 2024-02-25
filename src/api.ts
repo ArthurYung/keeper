@@ -48,6 +48,7 @@ function getPropertieReader (
  **/
 export function fromObject (properties: ProperiteItemMap, config: KeeperConfig) {
   return (source: any) => {
+    properties._lazySource()
     const result: any = {}
     properties.forEach((propertie) => {
       const reader = getPropertieReader(propertie, config)
@@ -80,6 +81,8 @@ export function readProperiteValue (
   config: KeeperConfig
 ) {
   return (obj: any, path: string): any => {
+    propertie._lazySource()
+
     const stringPath = path.match(RE_PROP_PATH) ?? []
 
     if (!stringPath.length) {
@@ -93,6 +96,8 @@ export function readProperiteValue (
     let currentValue = obj
 
     while (currentPath && activePropertie) {
+      activePropertie._lazySource()
+
       currentPropertie = activePropertie.get(currentPath)
 
       if (!currentPropertie) {

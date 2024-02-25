@@ -23,7 +23,7 @@ const testDeepExtendsObject = extendsObject2.from({});
 
 // 添加测试
 Benchmark.suite(
-  "Keeper JS Benchmark",
+  "Keeper Benchmark(Github action runner)",
   Benchmark.add("parse 10 properties string", function () {
     createKeeper(testData10);
   }),
@@ -37,6 +37,15 @@ Benchmark.suite(
       },
     });
   }),
+  Benchmark.add("lazy parse extends properties string", function () {
+    createKeeper(extendsTestData, {
+      extends: {
+        testData: test100Object,
+      },
+      lazy: true,
+    });
+  }),
+
   Benchmark.add("create 100 properties object", function () {
     test100Object.from({});
   }),

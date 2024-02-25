@@ -172,6 +172,24 @@ Keeper拥有良好的ts支持，可以通过导出的`DefineKeeperInterface`类�
 ![Monosnap screencast 2024-02-24 01-22-08](https://github.com/ArthurYung/keeper/assets/29910365/682fe9fd-8619-4dd0-b8de-64cbe71f2b15)
 ![Monosnap screencast 2024-02-24 01-23-19](https://github.com/ArthurYung/keeper/assets/29910365/9f73dcff-7e5c-4922-bf68-b0b43194d743)
 
+### Lazy延迟解析
+
+`createKeeper`的第二个参数可以设置`lazy`为`true`，这样Keeper会在第一次访问时才解析类型，而不是在创建时就解析。
+
+```javascript
+const userInfo = createKeeper(
+  `
+  name    string
+  age     int      renamefrom:user_age
+`,
+  { lazy: true },
+);
+
+userInfo.properties.has("name"); // false
+userInfo.get({ name: "bruce", user_age: "18.0" }, "name");
+userInfo.properties.has("name"); // true
+```
+
 # 支持的类型
 
 | 数据类型  | 对于js类型 | 默认值    | 备注       |

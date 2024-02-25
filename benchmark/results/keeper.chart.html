@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-    <title>Keeper JS Benchmark</title>
+    <title>Keeper Benchmark(Github action runner)</title>
     <style>
       body {
         margin: 0;
@@ -28,7 +28,7 @@
   </head>
   <body>
     <div class="container">
-      <canvas id="chart1708799385826" width="16" height="9"></canvas>
+      <canvas id="chart1708844338879" width="16" height="9"></canvas>
     </div>
     <script>
       const format = (num) => {
@@ -51,18 +51,18 @@
           chunked.map((chunk) => chunk.join('')).join(' ') + fractionStr
         )
       }
-      const ctx1708799385826 = document
-        .getElementById('chart1708799385826')
+      const ctx1708844338879 = document
+        .getElementById('chart1708844338879')
         .getContext('2d')
-      const chart1708799385826 = new Chart(ctx1708799385826, {
+      const chart1708844338879 = new Chart(ctx1708844338879, {
         type: 'bar',
         data: {
-          labels: ["parse 10 properties string","parse 100 properties string","parse extends properties string","create 100 properties object","create 100 properties object from target srouce","create object with extends properties(100 * 8)","lodash clone deep (100 * 8)","create object with deep extends properties(100 * 8 * 8)","lodash clone deep (100 * 8 * 8)","read properties"],
+          labels: ["parse 10 properties string","parse 100 properties string","parse extends properties string","lazy parse extends properties string","create 100 properties object","create 100 properties object from target srouce","create object with extends properties(100 * 8)","lodash clone deep (100 * 8)","create object with deep extends properties(100 * 8 * 8)","lodash clone deep (100 * 8 * 8)","read properties"],
           datasets: [
             {
-              data: [402193,40558,357297,159995,155270,24499,14937,3493,2085,3399092],
-              backgroundColor: ["hsl(14.195999999999998, 85%, 55%)","hsl(1.4279999999999973, 85%, 55%)","hsl(12.612000000000007, 85%, 55%)","hsl(5.651999999999993, 85%, 55%)","hsl(5.483999999999992, 85%, 55%)","hsl(0.8639999999999987, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.11999999999999318, 85%, 55%)","hsl(0.07200000000000273, 85%, 55%)","hsl(120, 85%, 55%)"],
-              borderColor: ["hsl(14.195999999999998, 85%, 55%)","hsl(1.4279999999999973, 85%, 55%)","hsl(12.612000000000007, 85%, 55%)","hsl(5.651999999999993, 85%, 55%)","hsl(5.483999999999992, 85%, 55%)","hsl(0.8639999999999987, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.11999999999999318, 85%, 55%)","hsl(0.07200000000000273, 85%, 55%)","hsl(120, 85%, 55%)"],
+              data: [390239,41642,382193,29188943,127751,125205,19221,14302,2718,2027,3784595],
+              backgroundColor: ["hsl(1.608000000000004, 85%, 55%)","hsl(0.16800000000000068, 85%, 55%)","hsl(1.5720000000000027, 85%, 55%)","hsl(120, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.5160000000000082, 85%, 55%)","hsl(0.08399999999999182, 85%, 55%)","hsl(0.05999999999999659, 85%, 55%)","hsl(0.01200000000000614, 85%, 55%)","hsl(0.01200000000000614, 85%, 55%)","hsl(15.563999999999998, 85%, 55%)"],
+              borderColor: ["hsl(1.608000000000004, 85%, 55%)","hsl(0.16800000000000068, 85%, 55%)","hsl(1.5720000000000027, 85%, 55%)","hsl(120, 85%, 55%)","hsl(0.5279999999999972, 85%, 55%)","hsl(0.5160000000000082, 85%, 55%)","hsl(0.08399999999999182, 85%, 55%)","hsl(0.05999999999999659, 85%, 55%)","hsl(0.01200000000000614, 85%, 55%)","hsl(0.01200000000000614, 85%, 55%)","hsl(15.563999999999998, 85%, 55%)"],
               borderWidth: 2,
             },
           ],
@@ -72,7 +72,7 @@
           plugins: {
             title: {
               display: true,
-              text: 'Keeper JS Benchmark',
+              text: 'Keeper Benchmark(Github action runner)',
               font: { size: 20 },
               padding: 20,
             },

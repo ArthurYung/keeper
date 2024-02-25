@@ -121,6 +121,8 @@ type Expand<T> = T extends Primitive
  **/
 export interface KeeperConfig {
   extends?: Record<string, Omit<KeeperInstance, 'read'>>
+  /** only executed when accessing the data. */
+  lazy?: boolean
 }
 
 export interface KeeperInstance<

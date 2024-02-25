@@ -65,7 +65,7 @@ Benchmark.suite(
 );
 
 Benchmark.suite(
-  "Benchmark Lazy & Benchmark Raed",
+  "Benchmark Lazy parsing & Keeper.raed()",
 
   Benchmark.add("lazy parse extends properties string", function () {
     createKeeper(extendsTestData, {

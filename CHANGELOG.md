@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.1 (2024-02-25)
+
+
+### Bug Fixes
+
+* remove console ([9c57d60](https://github.com/ArthurYung/keeper/commit/9c57d60e01663d8f26b82090543abbf287365f09))
+
 ## 1.2.0 (2024-02-24)
 
 

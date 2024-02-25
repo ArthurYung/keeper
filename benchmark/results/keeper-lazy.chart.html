@@ -28,7 +28,7 @@
   </head>
   <body>
     <div class="container">
-      <canvas id="chart1708845919131" width="16" height="9"></canvas>
+      <canvas id="chart1708846102656" width="16" height="9"></canvas>
     </div>
     <script>
       const format = (num) => {
@@ -51,18 +51,18 @@
           chunked.map((chunk) => chunk.join('')).join(' ') + fractionStr
         )
       }
-      const ctx1708845919131 = document
-        .getElementById('chart1708845919131')
+      const ctx1708846102656 = document
+        .getElementById('chart1708846102656')
         .getContext('2d')
-      const chart1708845919131 = new Chart(ctx1708845919131, {
+      const chart1708846102656 = new Chart(ctx1708846102656, {
         type: 'bar',
         data: {
           labels: ["lazy parse extends properties string","read properties"],
           datasets: [
             {
-              data: [28983370,3829154],
-              backgroundColor: ["hsl(120, 85%, 55%)","hsl(15.851999999999993, 85%, 55%)"],
-              borderColor: ["hsl(120, 85%, 55%)","hsl(15.851999999999993, 85%, 55%)"],
+              data: [23037585,2530900],
+              backgroundColor: ["hsl(120, 85%, 55%)","hsl(13.187999999999994, 85%, 55%)"],
+              borderColor: ["hsl(120, 85%, 55%)","hsl(13.187999999999994, 85%, 55%)"],
               borderWidth: 2,
             },
           ],

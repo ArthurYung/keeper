@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.3.0 (2024-02-27)
+
+
+### Features
+
+* support comments ([a998411](https://github.com/ArthurYung/keeper/commit/a998411b951122f085ab187ea46d76787964b11a))
+
 ### 1.2.4 (2024-02-25)
 
 

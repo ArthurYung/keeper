@@ -1,9 +1,9 @@
-import { test } from 'vitest'
-import { parse } from '../parser'
+import { test } from "vitest";
+import { parse } from "../parser";
 
-test('should parse a single line correctly', ({ expect }) => {
-  const input = 'key1 string'
-  const result = parse(input)
+test("should parse a single line correctly", ({ expect }) => {
+  const input = "key1 string";
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -14,15 +14,15 @@ test('should parse a single line correctly', ({ expect }) => {
         "type": "string",
       },
     }
-  `)
-})
+  `);
+});
 
-test('should parse multiple lines correctly', ({ expect }) => {
+test("should parse multiple lines correctly", ({ expect }) => {
   const input = `
    key1 bool
   key2 int
-`
-  const result = parse(input)
+`;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -40,10 +40,10 @@ test('should parse multiple lines correctly', ({ expect }) => {
         "type": "int",
       },
     }
-  `)
-})
+  `);
+});
 
-test('test parsing of all types correctly', ({ expect }) => {
+test("test parsing of all types correctly", ({ expect }) => {
   const input = `
 key1 bool
 key2 int
@@ -54,8 +54,8 @@ key6 undefined
 key7 void
 key8 func
 key9 object
-`
-  const result = parse(input)
+`;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -122,15 +122,15 @@ key9 object
         "type": "object",
       },
     }
-  `)
-})
+  `);
+});
 
-test('test array type correctly', ({ expect }) => {
+test("test array type correctly", ({ expect }) => {
   const input = `
   key1 bool[]
   key2 int
-  `
-  const result = parse(input)
+  `;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -148,15 +148,15 @@ test('test array type correctly', ({ expect }) => {
         "type": "int",
       },
     }
-  `)
-})
+  `);
+});
 
-test('test extends type correctly', ({ expect }) => {
+test("test extends type correctly", ({ expect }) => {
   const input = `
   key1 *other
       key2 int
-      `
-  const result = parse(input)
+      `;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -174,14 +174,14 @@ test('test extends type correctly', ({ expect }) => {
         "type": "int",
       },
     }
-  `)
-})
+  `);
+});
 
-test('test copy as type correctly', ({ expect }) => {
+test("test copy as type correctly", ({ expect }) => {
   const input = `
   key1 bool copyas:other
-  `
-  const result = parse(input)
+  `;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "other" => {
@@ -199,14 +199,14 @@ test('test copy as type correctly', ({ expect }) => {
         "type": "bool",
       },
     }
-  `)
-})
+  `);
+});
 
-test('test rename for type correctly', ({ expect }) => {
+test("test rename for type correctly", ({ expect }) => {
   const input = `
   key1 bool renamefor:other
-  `
-  const result = parse(input)
+  `;
+  const result = parse(input);
   expect(result).toMatchInlineSnapshot(`
     Map {
       "key1" => {
@@ -217,5 +217,24 @@ test('test rename for type correctly', ({ expect }) => {
         "type": "bool",
       },
     }
-  `)
-})
+  `);
+});
+
+test("test skip comments correctly", ({ expect }) => {
+  const input = `
+  // this is key1 
+  key1 bool renamefor:other
+  `;
+  const result = parse(input);
+  expect(result).toMatchInlineSnapshot(`
+    Map {
+      "key1" => {
+        "isArray": false,
+        "isExtend": false,
+        "key": "key1",
+        "name": "key1",
+        "type": "bool",
+      },
+    }
+  `);
+});

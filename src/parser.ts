@@ -59,6 +59,11 @@ function tokenizer (input: string = ''): string[][] {
  **/
 function compile (tokens: string[][], map: Map<string, ProperiteItem>) {
   for (let i = 0; i < tokens.length; i++) {
+    // skip comments.
+    if (tokens[i][0] === SymbolTypeTable.COMMENT) {
+      continue
+    }
+
     const properite = parseToken(tokens[i])
     const extensions = tokens[i][2] ? parseExtension(tokens[i][2]) : {}
 

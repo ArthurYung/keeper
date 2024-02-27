@@ -51,7 +51,7 @@ npm i keeper-js
 
 ### 类型描述
 
-Keeper通过接收一个描述对象的字符串文本来定义对象，该字符串应遵循以下格式（多余空格会被忽略）：
+Keeper通过接收一个描述对象的字符串文本来定义对象，该字符遵循以下格式：
 
 ```
 <property> <type> <extentions>
@@ -61,13 +61,15 @@ Keeper通过接收一个描述对象的字符串文本来定义对象，该字�
 - `<type>`：属性类型，可以是基础类型（如 string、int、float，详情见下文）或数组类型（如 int[]）。此外，也支持使用 `*<extends>` 格式来实现类型的嵌套
 - `<extentions>`（可选）：当前属性的额外描述，目前支持`<copyas>:<alias>`(复制当前类型为属性名为`<alias>`的新属性) 以及`<renamefrom>:<property>`(当前属性值从源对象的`<property>`属性返回)
 
-示例：
+每个描述项之间以一个或多个空格隔开，对象描述支持多行，每行描述一个属性，同时也支持以`//`进行注释。示例：
 
 ```typescript
 import { createKeeper } from "keeper-js";
 
 const userInfo = createKeeper(`
+   // name
    name    string
+   // age
    age     int      renamefrom:user_age
 `);
 

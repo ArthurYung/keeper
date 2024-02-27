@@ -51,7 +51,7 @@ npm i keeper-js
 
 ### Type Description
 
-Keeper defines objects by receiving a string text describing the object. This string should follow the format below (extra spaces will be ignored):
+Keeper defines objects by receiving a string text that describes the object, which follows the format below:
 
 ```
 <property> <type> <extentions>
@@ -61,7 +61,7 @@ Keeper defines objects by receiving a string text describing the object. This st
 - `<type>`: Property type, which can be a basic type (such as string, int, float, see details below) or an array type (such as int[]). In addition, it also supports using `*<extends>` format to implement nested types.
 - `<extensions>` (optional): Additional descriptions of the current property, currently supporting `<copyas>:<alias>` (copy the current type as a new property named `<alias>`) and `<renamefrom>:<property>` (the current property value returns from the `<property>` property of the source object).
 
-Example:
+Each description item is separated by one or more spaces, object descriptions support multiple lines, each line describes a property, and also supports comments with //. Example:
 
 ```typescript
 import { createKeeper } from "keeper-js";

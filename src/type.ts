@@ -51,15 +51,17 @@ type GetType<
  *
  **/
 type ParseLine<Str extends string, Includes extends Object = {}> =
-  Trim<Str> extends `${infer Key} ${infer Type} ${'copyas' | 'renamefrom'}:${infer ExtensionsValue}`
-    ? Str extends `${string} copyas:${string}`
-      ? {
-          [x in Key | ExtensionsValue]: GetType<Trim<Type>, Includes>;
-        }
-      : { [x in Trim<Key>]: GetType<TrimLeft<Type>, Includes> }
-    : Trim<Str> extends `${infer Key} ${infer Type}`
-      ? { [x in Key]: GetType<TrimLeft<Type>, Includes> }
-      : {}
+  Trim<Str> extends `//${string}`
+    ? Includes
+    : Trim<Str> extends `${infer Key} ${infer Type} ${'copyas' | 'renamefrom'}:${infer ExtensionsValue}`
+      ? Str extends `${string} copyas:${string}`
+        ? {
+            [x in Key | ExtensionsValue]: GetType<Trim<Type>, Includes>;
+          }
+        : { [x in Trim<Key>]: GetType<TrimLeft<Type>, Includes> }
+      : Trim<Str> extends `${infer Key} ${infer Type}`
+        ? { [x in Key]: GetType<TrimLeft<Type>, Includes> }
+        : {}
 
 /**
  * Convert a DSL for declaring types of

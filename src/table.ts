@@ -9,6 +9,7 @@ const SYMBOL_FUNC = 'func'
 const SYMBOL_OBJECT = 'object'
 const SYMBOL_EXTEND = '*'
 const SYMBOL_ARRAY = '[]'
+const SYMBOL_COMMENT = '//'
 
 type SYMBOL_BOOL = typeof SYMBOL_BOOL
 type SYMBOL_INT = typeof SYMBOL_INT
@@ -21,6 +22,7 @@ type SYMBOL_FUNC = typeof SYMBOL_FUNC
 type SYMBOL_OBJECT = typeof SYMBOL_OBJECT
 type SYMBOL_EXTEND = typeof SYMBOL_EXTEND
 type SYMBOL_ARRAY = typeof SYMBOL_ARRAY
+type SYMBOL_COMMENT = typeof SYMBOL_COMMENT
 
 export enum SymbolTypeTable {
   BOOL = SYMBOL_BOOL,
@@ -34,6 +36,7 @@ export enum SymbolTypeTable {
   OBJECT = SYMBOL_OBJECT,
   EXTEND = SYMBOL_EXTEND,
   ARRAY = SYMBOL_ARRAY,
+  COMMENT = SYMBOL_COMMENT,
 }
 
 export interface TypeTransformMap {

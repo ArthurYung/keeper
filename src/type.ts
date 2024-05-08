@@ -12,6 +12,7 @@ type TrimSpaces<Str extends string> = Str extends `${infer L} ${" "}${infer R}`
   : Str
 type Trim<Str extends string> = TrimLeft<TrimRight<TrimSpaces<Str>>>
 
+
 /*
  * Recursively convert types, supporting arrays and inheritance of reference types.
  *

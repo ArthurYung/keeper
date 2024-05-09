@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.3.1 (2024-05-09)
+
+
+### Bug Fixes
+
+* TrimLeft missing right-side spaces ([5027e1e](https://github.com/ArthurYung/keeper/commit/5027e1e8dbf9c1181dfce0ff5bf82b2c443b431d))
+
 ## 1.3.0 (2024-02-27)
 
 

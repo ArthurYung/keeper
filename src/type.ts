@@ -58,9 +58,9 @@ type ParseLine<Str extends string, Includes extends Object = {}> =
         ? {
             [x in Key | ExtensionsValue]: GetType<Trim<Type>, Includes>;
           }
-        : { [x in Trim<Key>]: GetType<TrimLeft<Type>, Includes> }
+        : { [x in Trim<Key>]: GetType<Trim<Type>, Includes> }
       : Trim<Str> extends `${infer Key} ${infer Type}`
-        ? { [x in Key]: GetType<TrimLeft<Type>, Includes> }
+        ? { [x in Key]: GetType<Trim<Type>, Includes> }
         : {}
 
 /**
